@@ -733,12 +733,14 @@ def updateName(domain, address, eth_contract, block):
         
             try:
                 # attempt to insert
+                #TODO: CHECK HOW IT CAN BE SOLVED
                 amount0 = amount0In - amount0Out
                 amount1 = amount1In - amount1Out
                 cursor.execute(i_name, [address, amount0, amount1, block])
             except mysql.connector.Error as err:
                 # update if record is there
                 if err.errno == 1062:
+                    #TODO: CHECK HOW IT CAN BE SOLVED
                     amount0 = amount0In - amount0Out
                     amount1 = amount1In - amount1Out
                     cursor.execute(u_name, [amount0, amount1, block, address])
@@ -804,7 +806,7 @@ da = []
 dn = []
 for c in cursor:
     # find true address
-    addr = ns.address(c[0])
+    addr = address(c[0])
     print (c[0] + '---' + addr)
     da.append(addr)
     dn.append(c[0])
