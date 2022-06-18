@@ -21,7 +21,7 @@ config = {
     'user': 'db_user_1',
     'password': 'db_user_password',
     'host': 'localhost',
-    'database': 'lateProceeded',
+    'database': 'timeparsing',
     'raise_on_warnings': True
 }
 
