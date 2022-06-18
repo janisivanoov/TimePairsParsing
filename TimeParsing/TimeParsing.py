@@ -730,11 +730,15 @@ def updateName(domain, address, eth_contract, block):
         
             try:
                 # attempt to insert
-                cursor.execute(i_name, [address, domain, eth_contract, block])
+                amount0 = amount0In - amount0Out
+                amount1 = amount1In - amount1Out
+                cursor.execute(i_name, [address, amount0, amount1, block])
             except mysql.connector.Error as err:
                 # update if record is there
                 if err.errno == 1062:
-                    cursor.execute(u_name, [domain, eth_contract, block, address])
+                    amount0 = amount0In - amount0Out
+                    amount1 = amount1In - amount1Out
+                    cursor.execute(u_name, [amount0, amount1, block, address])
                 else:
                     print (err)
                     quit()
@@ -750,7 +754,7 @@ def updateNames(addresses, blocks, contracts):
                 updateName(str(n), str(addresses[ii]), str(contracts[ii]), str(blocks[ii]))
                 ii += 1
     except BaseException as err:
-            print("Exception. Cannot resolve names  " + str(err))
+            print("Exception: " + str(err))
 
 # Read contracts into array
 contracts = []
@@ -787,5 +791,28 @@ while (b+maxcount<len(aaa)):
 
 updateNames(aaa[b:len(aaa)-1], bbb[b:len(bbb)-1], ccc[b:len(ccc)-1])
 
-# Getting logs
-print(w3.eth.getLogs(params))
+# Fix duplications if there is
+print("Cleaning duplicates...")
+
+# Find Duplications
+c_sql = "select amount1, amount2 from duplicates"
+cursor.execute(c_sql)
+da = []
+dn = []
+for c in cursor:
+    # find true address
+    addr = ns.address(c[0])
+    print (c[0] + '---' + addr)
+    da.append(addr)
+    dn.append(c[0])
+
+# Delete duplications
+d_name = "delete from main where amount1 = %s and amount2= %s and addr != %s "
+i=0
+for address in da:
+    cursor.execute(d_name, [ dn[i], address ])
+    my_cn.commit()
+    i+=1
+    
+# Close the cursor and the connection
+cursor.close()
