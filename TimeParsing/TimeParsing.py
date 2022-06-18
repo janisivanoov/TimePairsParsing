@@ -719,8 +719,8 @@ def getBlock(contract):
 
 
 # Function that updates main table
-def updateName(domain, address, eth_contract, block):
-    i_name = "insert into main (addr, amount1, amount2, block) values (%s, %s, %s, %s)"
+def updateName(address, amount0In, amount0Out, amount1In, amount1Out, block):
+    i_name = "insert into main (addr, amount0In, amount0Out, amount1In, amount1Out, block) values (%s, %s, %s, %s, %s, %s)"
     u_name = "update main set amount1 = %s, amount2 = %s, block=%s"
     d_name = "delete from main where addr = %s"
     if domain != "":
@@ -733,17 +733,11 @@ def updateName(domain, address, eth_contract, block):
         
             try:
                 # attempt to insert
-                #TODO: CHECK HOW IT CAN BE SOLVED
-                amount0 = amount0In - amount0Out
-                amount1 = amount1In - amount1Out
-                cursor.execute(i_name, [address, amount0, amount1, block])
+                cursor.execute(i_name, [address, amount0In, amount0Out, amount1In, amount1Out, block])
             except mysql.connector.Error as err:
                 # update if record is there
                 if err.errno == 1062:
-                    #TODO: CHECK HOW IT CAN BE SOLVED
-                    amount0 = amount0In - amount0Out
-                    amount1 = amount1In - amount1Out
-                    cursor.execute(u_name, [amount0, amount1, block, address])
+                    cursor.execute(u_name, [amount0In, amount0Out, amount1In, amount1Out, block, address])
                 else:
                     print (err)
                     quit()
