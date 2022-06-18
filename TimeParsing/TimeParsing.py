@@ -792,29 +792,6 @@ while (b+maxcount<len(aaa)):
     b += maxcount
 
 updateNames(aaa[b:len(aaa)-1], bbb[b:len(bbb)-1], ccc[b:len(ccc)-1])
-
-# Fix duplications if there is
-print("Cleaning duplicates...")
-
-# Find Duplications
-c_sql = "select amount0In, amount0Out, amount1In, amount1Out, addr from duplicates"
-cursor.execute(c_sql)
-da = []
-dn = []
-for c in cursor:
-    # find true address
-    addr = address(c[0])
-    print (c[0] + '---' + addr)
-    da.append(addr)
-    dn.append(c[0])
-
-# Delete duplications
-d_name = "delete from main where amount0In = %s , amount0Out = %s , amount1In = %s , amount1Out = %s , addr != %s "
-i=0
-for address in da:
-    cursor.execute(d_name, [ dn[i], address ])
-    my_cn.commit()
-    i+=1
     
 # Close the cursor and the connection
 cursor.close()
