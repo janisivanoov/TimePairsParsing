@@ -6,6 +6,9 @@ from mysql.connector import errorcode
 import hashlib
 import urllib.request
 
+# TODO: CHECK THE URL!!!
+# TODO: CHECK THE URL!!!
+# TODO: CHECK THE URL!!!
 w3 = Web3(HTTPProvider('https://mainnet.infura.io/v3/e1aff836d3a64d6aba0f028217da381f'))
 eth_key = 'X9FG4X92X5FVU75UWHT5W7VE6RDRYYNT6R'
 contract = '0xa274d4daaff01e3aa710907aabdd57d036c96cec'
