@@ -3,7 +3,6 @@ from eth_utils import address
 from web3 import Web3, HTTPProvider
 import mysql.connector
 from mysql.connector import errorcode
-import hashlib
 import urllib.request
 
 w3 = Web3(HTTPProvider('https://bsc-dataseed1.binance.org/'))
@@ -28,7 +27,10 @@ abiC = [
         "inputs":[
             {
                 "internalType":"address","name":"_factory","type":"address"
-                },{"internalType":"address","name":"_WETH","type":"address"}
+                },
+                {
+                    "internalType":"address","name":"_WETH","type":"address"
+                    }
                 ],
         "stateMutability":"nonpayable",
         "type":"constructor"
@@ -79,13 +81,15 @@ abiC = [
                                                             {
                                                                 "internalType":"uint256","name":"amountB","type":"uint256"
                                                                 },
-                                                                {"internalType":"uint256","name":"liquidity","type":"uint256"
+                                                                {
+                                                                    "internalType":"uint256","name":"liquidity","type":"uint256"
                                                                  }
                                                                 ],
                                                     "stateMutability":"nonpayable",
                                                     "type":"function"
                                                     },
-                {"inputs":[
+                {
+                    "inputs":[
                     {
                         "internalType":"address",
                         "name":"token","type":"address"
@@ -102,9 +106,11 @@ abiC = [
                                 },
                                 {
                                     "internalType":"uint256","name":"amountETHMin","type":"uint256"
-                                    },{
+                                    },
+                                    {
                                         "internalType":"address","name":"to","type":"address"
-                                        },{
+                                        },
+                                    {
                                             "internalType":"uint256","name":"deadline","type":"uint256"
                                             }
                                     ],
@@ -791,7 +797,7 @@ updateNames(aaa[b:len(aaa)-1], bbb[b:len(bbb)-1], ccc[b:len(ccc)-1])
 print("Cleaning duplicates...")
 
 # Find Duplications
-c_sql = "select amount0In, amount0Out, amount1In, amount1Out from duplicates"
+c_sql = "select amount0In, amount0Out, amount1In, amount1Out, addr from duplicates"
 cursor.execute(c_sql)
 da = []
 dn = []
